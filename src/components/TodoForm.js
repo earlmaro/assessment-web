@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 function TodoForm(props) {
-  const [input, setInput] = useState(props.edit ? props.edit.value : '');
+  // const [input, setInput] = useState(props.edit ? props.edit.title : '');
+  const [input, setInput] = useState({
+    id: props.edit ? props.edit.id : '',
+    title: props.edit ? props.edit.title : '',
+    photo: props.edit ? props.edit.photo : '',
+    is_completed: props.edit ? props.edit.is_completed : ''
+  });
 
   const inputRef = useRef(null);
 
@@ -10,15 +16,23 @@ function TodoForm(props) {
   });
 
   const handleChange = e => {
-    setInput(e.target.value);
+    // setInput(e.target.value);
+    setInput({
+      id: input.id,
+      title: e.target.value,
+      photo: input.photo,
+      is_completed: input.is_completed
+    });
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
     props.onSubmit({
-      photo: Math.floor(Math.random() * 10000),
-      title: input
+      photo: input.photo,
+      title: input.title,
+      is_completed: input.is_completed,
+      id: input.id,
     });
     setInput('');
   };
@@ -29,7 +43,7 @@ function TodoForm(props) {
         <>
           <input
             placeholder='Update your item'
-            value={input}
+            value={input.title}
             onChange={handleChange}
             name='text'
             ref={inputRef}
@@ -43,7 +57,7 @@ function TodoForm(props) {
         <>
           <input
             placeholder='Add a todo'
-            value={input}
+            value={input.title}
             onChange={handleChange}
             name='text'
             className='todo-input'

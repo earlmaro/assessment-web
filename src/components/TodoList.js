@@ -31,12 +31,19 @@ function TodoList() {
     }
   };
 
-  const updateTodo = (todoId, newValue) => {
-    if (!newValue.text || /^\s*$/.test(newValue.text)) {
-      return;
+  const updateTodo = async (todo) => {
+    try {
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}/v1/todo/${todo.id}`,
+        {
+          ...todo
+        }
+        );
+      enqueueSnackbar('Todo item has been Updated!', { variant: 'success' });
+      dispatch(getTodos());
+    } catch (error) {
+      enqueueSnackbar('oops! Something went wrong!', { variant: 'error' });
     }
-
-    setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
   };
 
   const removeTodo = async (id) => {

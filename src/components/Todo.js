@@ -6,14 +6,19 @@ import { TiEdit } from 'react-icons/ti';
 const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
   const [edit, setEdit] = useState({
     id: null,
-    value: ''
+    title: '',
+    photo: '',
+    is_completed: false
   });
 
   const submitUpdate = value => {
-    updateTodo(edit.id, value);
+    // console.log(value);
+    updateTodo(value);
     setEdit({
       id: null,
-      value: ''
+      title: '',
+      photo: '',
+      is_completed: false
     });
   };
 
@@ -35,7 +40,7 @@ const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
           className='delete-icon'
         />
         <TiEdit
-          onClick={() => setEdit({ id: todo.id, value: todo.title })}
+          onClick={() => setEdit({ id: todo.id, title: todo.title, photo: todo.photo, is_completed: todo.is_completed })}
           className='edit-icon'
         />
       </div>
