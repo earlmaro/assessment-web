@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoForm from './TodoForm';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 
-const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
+const Todo = ({ todos, completeTodo, removeTodo, updateTodo, storageUrl }) => {
   const [edit, setEdit] = useState({
     id: null,
     title: '',
@@ -31,12 +31,16 @@ const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
       className={todo.isComplete ? 'todo-row complete' : 'todo-row'}
       key={index}
     >
+      <div>
+        {<img src= {`${storageUrl}uploads/${todo.photo}`} alt="profile" class="profile" />}
+      </div>
+      
       <div key={todo.id} onClick={() => completeTodo(todo.id)}>
         {todo.title}
       </div>
       <div className='icons'>
         <RiCloseCircleLine
-          onClick={() => removeTodo(todo.id)}
+          onClick={() => removeTodo(todo.id, todo.title)}
           className='delete-icon'
         />
         <TiEdit

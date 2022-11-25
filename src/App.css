@@ -31,10 +31,36 @@ h1 {
   color: #fff;
   font-size: 24px;
 }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .complete {
   text-decoration: line-through;
   opacity: 0.4;
+}
+.modal-header {
+  width:500px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.modal-inputs {
+  width:500px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 15px;
+  padding: 14px 32px 14px 16px;
+  border-radius: 4px 0 0 4px;
+  border: 2px solid #5d0cff;
+  outline: none;
+  width: 320px;
+  background: transparent;
+  color: #fff;
 }
 
 .todo-form {
@@ -70,6 +96,25 @@ h1 {
   text-transform: capitalize;
 }
 
+.todo-add-button {
+  padding: 16px;
+  width: 350px;
+  border: none;
+  border-radius: 4px 4px 4px 4px;
+  cursor: pointer;
+  outline: none;
+  background: linear-gradient(
+    90deg,
+    rgba(93, 12, 255, 1) 0%,
+    rgba(155, 0, 250, 1) 100%
+  );
+  color: #fff;
+  text-transform: capitalize;
+  margin-bottom: 13px;
+}
+.button-1{
+	float:right
+}
 .todo-input.edit {
   border: 2px solid #149fff;
 }
