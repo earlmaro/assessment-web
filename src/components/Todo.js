@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import TodoForm from './TodoForm';
+import Popup from './Popup';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
 
-const Todo = ({ todos, completeTodo, removeTodo, updateTodo, storageUrl }) => {
+const Todo = ({ todos, completeTodo, removeTodo, updateTodo, storageUrl, editTodo }) => {
   const [edit, setEdit] = useState({
     id: null,
     title: '',
@@ -21,10 +21,16 @@ const Todo = ({ todos, completeTodo, removeTodo, updateTodo, storageUrl }) => {
       is_completed: false
     });
   };
+  const handleEdit = (todo) => {
+    // childRef.current.openModal();
+    // setEdit({ id: todo.id, title: todo.title, photo: todo.photo, is_completed: todo.is_completed })
+    
+    editTodo(todo);
+  };
 
-  if (edit.id) {
-    return <TodoForm edit={edit} onSubmit={submitUpdate} />;
-  }
+  // if (edit.id) {
+  //   return <Popup edit={edit} onSubmit={submitUpdate} />;
+  // }
 
   return todos.map((todo, index) => (
     <div
@@ -32,7 +38,7 @@ const Todo = ({ todos, completeTodo, removeTodo, updateTodo, storageUrl }) => {
       key={index}
     >
       <div>
-        {<img src= {`${storageUrl}uploads/${todo.photo}`} alt="profile" class="profile" />}
+        {<img src= {`${storageUrl}uploads/${todo.photo}`} alt="todo photo" />}
       </div>
       
       <div key={todo.id} onClick={() => completeTodo(todo.id)}>
@@ -44,7 +50,7 @@ const Todo = ({ todos, completeTodo, removeTodo, updateTodo, storageUrl }) => {
           className='delete-icon'
         />
         <TiEdit
-          onClick={() => setEdit({ id: todo.id, title: todo.title, photo: todo.photo, is_completed: todo.is_completed })}
+          onClick={() => handleEdit(todo)}
           className='edit-icon'
         />
       </div>

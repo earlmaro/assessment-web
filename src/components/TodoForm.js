@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { RiContactsBookLine } from 'react-icons/ri';
 
 function TodoForm(props) {
   const [input, setInput] = useState({

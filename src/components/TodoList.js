@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import TodoForm from './TodoForm';
+import React, { useState, useEffect, useRef } from 'react';
+import Popup from './Popup';
 import Todo from './Todo';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from '../redux/store';
@@ -12,44 +12,18 @@ function TodoList() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { todos, storageUrl, errorMessage } = useSelector((state) => state.todo);
-  const [todo, setTodos] = useState([]);
+  const [todo, setTodos] = useState({});
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  let subtitle;
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      height: '350px',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      background: '#161a2b',
-    },
+  const childRef = useRef(null);
+
+  const handleClick = () => {
+    childRef.current.openModal();
   };
-  Modal.setAppElement(document.getElementById('root'));
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
+  const resetEdit = () => {
+    setTodos({});
+  };
 
   const newTodo = async (todo) => {
-    if (!todo.title || /^\s*$/.test(todo.title)) {
-      enqueueSnackbar('Enter todo title', { variant: 'error' });
-      return;
-    }
-    console.log(todo);
-    if (!todo.photo) {
-      enqueueSnackbar('Select a photo', { variant: 'error' });
-      return;
-    }
     const formData = new FormData();
 		for ( var key in todo ) {
       formData.append(key, todo[key]);
@@ -57,7 +31,8 @@ function TodoList() {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/todo`, formData);
         dispatch(getTodos());
-        closeModal()
+        childRef.current.removeModal();
+        childRef.current.resetModal();
         enqueueSnackbar('Todo item created!', { variant: 'success' });
     } catch (error) {
       enqueueSnackbar('oops! Something went wrong!', { variant: 'error' });
@@ -107,6 +82,10 @@ function TodoList() {
       }
     });
   };
+  const editTodo = todo => {
+    setTodos(todo);
+    childRef.current.openModal();
+  };
 
   const completeTodo = id => {
     let updatedTodos = todos.map(todo => {
@@ -126,18 +105,8 @@ function TodoList() {
     <>
       <h1>What's the Plan for Today?</h1>
       <div>
-      <button onClick={openModal} className='todo-add-button'>Add Todo</button>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-        >
-          <div>
-            <button onClick={closeModal} className="button-1">close</button>
-          </div>
-        <TodoForm onSubmit={newTodo} />
-      </Modal>
+      <button onClick={handleClick} className='todo-add-button'>Add Todo</button>
+      <Popup ref={childRef} onSubmit={newTodo} edit={todo} storageUrl={storageUrl} resetEdit={resetEdit} />
     </div>
       <Todo
         todos={todos}
@@ -145,6 +114,7 @@ function TodoList() {
         completeTodo={completeTodo}
         removeTodo={removeTodo}
         updateTodo={updateTodo}
+        editTodo={editTodo}
       />
     </>
   );
