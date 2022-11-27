@@ -39,8 +39,10 @@ function TodoList() {
         Object.entries(error.response.data.message.message).forEach(([key, value]) =>
           enqueueSnackbar(value[0], { variant: 'error' })
         );
+      }else{
+        enqueueSnackbar('oops! encountered an error', { variant: 'error' });
+        childRef.current.setSubmit();
       }
-      childRef.current.setSubmit();
       console.log(error);
     }
   };
@@ -137,7 +139,7 @@ function TodoList() {
       />
       {todos.length === 0 && (
         <div className='center'>
-          <p style={{ color: 'white', marginTop: "50px" }}>You currently have no to items.</p>
+          <p style={{ color: 'white', marginTop: "50px" }}>You currently have no todo item.</p>
         </div>
       )}
     </>
