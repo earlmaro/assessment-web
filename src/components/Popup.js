@@ -162,6 +162,7 @@ const Popup = forwardRef((props, ref) => {
                   placeholder='change file'
                   onChange={handleChange}
                   name='photo'
+                  accept="image/png, image/jpeg"
                   className='modal-inputs'
                 />
               </div>
@@ -225,6 +226,7 @@ const Popup = forwardRef((props, ref) => {
                 type='file'
                 placeholder='Add a todo'
                 onChange={handleChange}
+                accept="image/png, image/jpeg"
                 name='photo'
                 className='modal-inputs'
               />
