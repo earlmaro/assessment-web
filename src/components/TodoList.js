@@ -25,32 +25,47 @@ function TodoList() {
 
   const newTodo = async (todo) => {
     const formData = new FormData();
-		for ( var key in todo ) {
+    for (var key in todo) {
       formData.append(key, todo[key]);
     }
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/todo`, formData);
-        dispatch(getTodos());
-        childRef.current.removeModal();
-        childRef.current.resetModal();
-        enqueueSnackbar('Todo item created!', { variant: 'success' });
+      dispatch(getTodos());
+      childRef.current.removeModal();
+      childRef.current.resetModal();
+      enqueueSnackbar('Todo item created!', { variant: 'success' });
     } catch (error) {
-      enqueueSnackbar('oops! Something went wrong!', { variant: 'error' });
+      if (error.response.data.message.statusCode === 422) {
+        Object.entries(error.response.data.message.message).forEach(([key, value]) =>
+          enqueueSnackbar(value[0], { variant: 'error' })
+        );
+      }
+      childRef.current.setSubmit();
+      console.log(error);
     }
   };
 
   const updateTodo = async (todo) => {
+    const formData = new FormData();
+    for (var key in todo) {
+      formData.append(key, todo[key]);
+    }
+    formData.append('_method', 'PATCH');
     try {
-      const response = await axios.patch(
-        `${process.env.REACT_APP_API_URL}/v1/todo/${todo.id}`,
-        {
-          ...todo
-        }
-        );
-        dispatch(getTodos());
-      enqueueSnackbar('Todo item has been Updated!', { variant: 'success' });
+      await axios
+        .post(`${process.env.REACT_APP_API_URL}/v1/todo/${todo.id}`, formData)
+        .then((data) => {
+          dispatch(getTodos());
+          childRef.current.removeModal();
+          childRef.current.resetModal();
+          enqueueSnackbar('Todo item has been Updated!', { variant: 'success' });
+        });
+
     } catch (error) {
-      enqueueSnackbar('oops! Something went wrong!', { variant: 'error' });
+      if (!error.response.data.success) {
+        enqueueSnackbar(error.response.data.message, { variant: 'error' });
+        childRef.current.setSubmit();
+      }
     }
   };
   const deleteTodo = async (id) => {
@@ -59,12 +74,14 @@ function TodoList() {
       dispatch(getTodos());
       enqueueSnackbar('Todo item has been removed!', { variant: 'success' });
     } catch (error) {
-      enqueueSnackbar('oops! Something went wrong!', { variant: 'error' });
+      if (!error.response.data.success) {
+        enqueueSnackbar(error.response.data.message, { variant: 'error' });
+      }
     }
   }
-  
-  (function dne(){
-    if(errorMessage) enqueueSnackbar(`oops! ${errorMessage}`, { variant: 'error' });
+
+  (function dne() {
+    if (errorMessage) enqueueSnackbar(`oops! ${errorMessage}`, { variant: 'error' });
   })();
 
   const removeTodo = async (id, title) => {
@@ -84,17 +101,11 @@ function TodoList() {
   };
   const editTodo = todo => {
     setTodos(todo);
-    childRef.current.openModal();
+    childRef.current.editModal(todo);
   };
-
-  const completeTodo = id => {
-    let updatedTodos = todos.map(todo => {
-      if (todo.id === id) {
-        todo.isComplete = !todo.isComplete;
-      }
-      return todo;
-    });
-    setTodos(updatedTodos);
+  const viewTodo = todo => {
+    setTodos(todo);
+    childRef.current.viewTodoModal();
   };
 
   useEffect(() => {
@@ -105,17 +116,30 @@ function TodoList() {
     <>
       <h1>What's the Plan for Today?</h1>
       <div>
-      <button onClick={handleClick} className='todo-add-button'>Add Todo</button>
-      <Popup ref={childRef} onSubmit={newTodo} edit={todo} storageUrl={storageUrl} resetEdit={resetEdit} />
-    </div>
+        <button onClick={handleClick} className='todo-add-button'>Add Todo</button>
+        <Popup
+          ref={childRef}
+          onSubmit={newTodo}
+          edit={todo}
+          storageUrl={storageUrl}
+          resetEdit={resetEdit}
+          completeTodo={updateTodo}
+          updateTodo={updateTodo}
+        />
+      </div>
       <Todo
         todos={todos}
         storageUrl={storageUrl}
-        completeTodo={completeTodo}
         removeTodo={removeTodo}
         updateTodo={updateTodo}
         editTodo={editTodo}
+        viewTodo={viewTodo}
       />
+      {todos.length === 0 && (
+        <div className='center'>
+          <p style={{ color: 'white', marginTop: "50px" }}>You currently have no to items.</p>
+        </div>
+      )}
     </>
   );
 }

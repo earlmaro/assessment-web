@@ -7,11 +7,12 @@
 }
 
 body {
-  background: linear-gradient(
+  /* background: linear-gradient(
     90deg,
     rgba(48, 16, 255, 1) 0%,
     rgba(100, 115, 255, 1) 100%
-  );
+  ); */
+  background: black;
 }
 .App {
   display: flex;
@@ -24,6 +25,11 @@ body {
   margin: 128px auto;
   border-radius: 10px;
   padding-bottom: 32px;
+  /* border: #282828; */
+  border: 2px solid #282828;
+}
+.center {
+  text-align: center;
 }
 
 h1 {
@@ -35,6 +41,34 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.view-todo-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin-bottom: 20px;
+  width:100%;
+}
+
+.button-disabled{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  padding: 16px;
+  width: 150px;
+  border-radius: 4px 4px 4px 4px;
+  outline: none;
+}
+.todo-title {
+  max-width: 150%;
+  /* width: 100px; */
+  /* height: auto; */
+}
+
+.todo-title:hover {
+  text-decoration : underline;
 }
 
 .complete {
@@ -61,7 +95,8 @@ h1 {
   width:500px;
   margin: 0 auto;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+  margin-bottom: 25px;
   padding: 14px 32px 14px 16px;
   border-radius: 4px 0 0 4px;
   border: 2px solid #5d0cff;
@@ -106,7 +141,7 @@ h1 {
 
 .todo-add-button {
   padding: 16px;
-  width: 350px;
+  width: auto;
   border: none;
   border-radius: 4px 4px 4px 4px;
   cursor: pointer;
@@ -118,14 +153,17 @@ h1 {
   );
   color: #fff;
   text-transform: capitalize;
-  margin-bottom: 13px;
+  margin-top: 12px;
+  margin-bottom: 5px;
 }
 .button-1{
-	float:right
+    float:right
 }
 .todo-input.edit {
   border: 2px solid #149fff;
 }
+
+
 
 .todo-button.edit {
   background: linear-gradient(
@@ -197,4 +235,9 @@ h1 {
 
 .edit-icon {
   color: #fff;
+}
+
+.close-modal {
+  color: red;
+  background-color: white;
 }

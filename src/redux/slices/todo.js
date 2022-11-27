@@ -26,11 +26,9 @@ const slice = createSlice({
     hasError(state, action) {
       state.isLoading = false;
       state.error = true;
-      if (process.env.NODE_ENV !== 'production') state.errorMessage = action.payload.message;
-      // if (process.env.NODE_ENV === 'production') state.errorMessage = 'Network Error';
+      state.errorMessage = action.payload.message;
     },
 
-    // GET MANAGE TRANSACTIONS
     getTodoListSuccess(state, action) {
       state.isLoading = false;
       state.todos = action.payload;
