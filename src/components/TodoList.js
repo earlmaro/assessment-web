@@ -35,17 +35,14 @@ function TodoList() {
       childRef.current.resetModal();
       enqueueSnackbar('Todo item created!', { variant: 'success' });
     } catch (error) {
-      console.log(error)
-      if (error.response && error.response.data.message.statusCode === 422) {
+      if (error.response.data.message.statusCode === 422) {
         Object.entries(error.response.data.message.message).forEach(([key, value]) =>
           enqueueSnackbar(value[0], { variant: 'error' })
         );
       }else{
-        console.log('ddd');
         enqueueSnackbar('oops! encountered an error', { variant: 'error' });
         childRef.current.setSubmit();
       }
-      console.log(error);
     }
   };
 
