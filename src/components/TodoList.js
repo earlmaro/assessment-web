@@ -63,8 +63,11 @@ function TodoList() {
         });
 
     } catch (error) {
-      if (!error.response.data.success) {
+      if (error.response && !error.response.data.success) {
         enqueueSnackbar(error.response.data.message, { variant: 'error' });
+        childRef.current.setSubmit();
+      }else{
+        enqueueSnackbar('oops! encountered an error', { variant: 'error' });
         childRef.current.setSubmit();
       }
     }
@@ -75,8 +78,12 @@ function TodoList() {
       dispatch(getTodos());
       enqueueSnackbar('Todo item has been removed!', { variant: 'success' });
     } catch (error) {
-      if (!error.response.data.success) {
+      if (error.response && !error.response.data.success) {
         enqueueSnackbar(error.response.data.message, { variant: 'error' });
+        childRef.current.setSubmit();
+      }else{
+        enqueueSnackbar('oops! encountered an error', { variant: 'error' });
+        childRef.current.setSubmit();
       }
     }
   }
